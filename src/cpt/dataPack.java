@@ -12,4 +12,8 @@ public class dataPack {
         this.year = year;
     }
 
+    public String getAge() {
+        return ageRange;
+    }
+
 }
