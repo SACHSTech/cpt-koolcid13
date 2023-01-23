@@ -45,6 +45,7 @@ public class chartApp extends Application {
     private VBox dataVBox;
     private HBox filtHBox;
     private HBox screenHBox;
+    
 
     }
 
