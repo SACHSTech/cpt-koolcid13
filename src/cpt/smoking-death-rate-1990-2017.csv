@@ -1,5 +1,4 @@
-Entity,Code,Year,Deaths - Cause: All causes - Risk: Smoking - Sex: Both - Age: Age-standardized (Rate),Continent,Deaths - Cause: All causes - Risk: Smoking - Sex: Both - Age: Age-standardized (Rate),Year
-Abkhazia,OWID_ABK,2015,,Asia,,
+
 Afghanistan,AFG,1990,75.84,,81.75,2019
 Afghanistan,AFG,1991,75.64,,81.75,2019
 Afghanistan,AFG,1992,75.66,,81.75,2019
@@ -25,7 +24,7 @@ Afghanistan,AFG,2011,79.85,,81.75,2019
 Afghanistan,AFG,2012,80.2,,81.75,2019
 Afghanistan,AFG,2013,80.31,,81.75,2019
 Afghanistan,AFG,2014,80.72,,81.75,2019
-Afghanistan,AFG,2015,81.38,Asia,81.75,2019
+Afghanistan,AFG,2015,81.38,,81.75,2019
 Afghanistan,AFG,2016,81.63,,81.75,2019
 Afghanistan,AFG,2017,82.05,,81.75,2019
 Afghanistan,AFG,2018,82.16,,81.75,2019
@@ -60,7 +59,6 @@ African Region (WHO),,2016,55.17,,51.5,2019
 African Region (WHO),,2017,54.02,,51.5,2019
 African Region (WHO),,2018,52.63,,51.5,2019
 African Region (WHO),,2019,51.5,,51.5,2019
-Akrotiri and Dhekelia,OWID_AKD,2015,,Asia,,
 Albania,ALB,1990,147.22,,102.61,2019
 Albania,ALB,1991,146.24,,102.61,2019
 Albania,ALB,1992,137.62,,102.61,2019
