@@ -42,15 +42,22 @@ public class chartApp extends Application {
     private XYChart.Series <Integer, Double> fiftyTo69;
     private XYChart.Series <Integer, Double> seventyPlus;
 
-    private VBox dataVBox;
     private HBox filtHBox;
     private HBox screenHBox;
-    
 
-    }
+    private TableView<dataPack> datapointTable;
+    private TableColumn<dataPack, String> ageRangeCol;
+    private TableColumn<dataPack, Integer> yearCol;
+    private TableColumn<dataPack, Double> rateCol;
+
 
 
     @Override public void start(Stage primaryStage) throws Exception {
+
+        datapointTable = new TableView<>();
+        ageRangeCol = new TableColumn<>("Age Range");
+        yearCol = new TableColumn<>("Year");
+        rateCol = new TableColumn<>("Suicide Rate");
 
         fiveTo14 = new XYChart.Series<>();
         allAge = new XYChart.Series<>();
@@ -59,8 +66,9 @@ public class chartApp extends Application {
         fiftyTo69 = new XYChart.Series<>();
         seventyPlus = new XYChart.Series<>();
 
-        primaryStage.setScene(new Scene(createContent()));
-        primaryStage.show();
+
+        datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
+
     }
 
     /**
