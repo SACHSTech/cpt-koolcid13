@@ -8,7 +8,7 @@ public class userInteract {
     public static ArrayList<dataReader> dataList = new ArrayList<dataReader>();
     public static void main(String[] args) throws IOException {
 
-
+        userInteract userInteract = new userInteract();
     }
 
     public userInteract() throws IOException{

@@ -14,6 +14,7 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.stage.Stage;
 
 
+
 public class ScatterChartApp extends Application {
 
     private ScatterChart chart;
@@ -25,7 +26,8 @@ public class ScatterChartApp extends Application {
         yAxisDeathRate2019 = new NumberAxis("Y-Axis", 0.0d, 5.0d, 1.0d);
         final Series <Number, Number> series = new Series<>();
         series.setName("Series 1");
-        series.getData().addAll(new Data(0.2, 3.5),
+
+        /*series.getData().addAll(new Data(0.2, 3.5),
                                 new Data(0.7, 4.6),
                                 new Data(1.8, 1.7),
                                 new Data(2.1, 2.8),
@@ -35,6 +37,13 @@ public class ScatterChartApp extends Application {
                                 new Data(6.0, 3.0),
                                 new Data(7.0, 2.0),
                                 new Data(7.8, 4.0));
+        */
+
+        for (int i = 0; i < dataList.size(); i ++) {
+            series.getData().add(new Data(dataList.get(i).get(0)), 1);
+        }
+
+
         chart = new ScatterChart(xAxisDeathRate1990, yAxisDeathRate2019);
         chart.getData().add(series);
         return chart;
