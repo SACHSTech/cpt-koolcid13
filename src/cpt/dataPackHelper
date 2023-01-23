@@ -23,16 +23,36 @@ public class dataPackHelper {
         this.standardized = standardized;
     }
 
-    public String getAge() {
-        return ageRange;
-    }
-
-    public double getSuicideRate() {
-        return suicideRate;
+    public String getCountry() {
+        return country;
     }
 
     public int getYear() {
         return year;
+    }
+
+    public double getAllAge() {
+        return allAge;
+    }
+
+    public double getSeventyPlus() {
+        return seventyPlus;
+    }
+
+    public double getFiftyTo69() {
+        return fiftyTo69;
+    }
+
+    public double getFifteenTo49() {
+        return fifteenTo49;
+    }
+
+    public double getFiveTo14() {
+        return fiveTo14;
+    }
+
+    public double getStandard() {
+        return standardized;
     }
 
 }
