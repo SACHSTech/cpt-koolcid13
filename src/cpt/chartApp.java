@@ -52,6 +52,16 @@ public class chartApp extends Application {
 
 
 
+
+    /**
+     * Java main for when running without JavaFX launcher
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+
     @Override public void start(Stage primaryStage) throws Exception {
 
         datapointTable = new TableView<>();
@@ -71,12 +81,42 @@ public class chartApp extends Application {
 
     }
 
-    /**
-     * Java main for when running without JavaFX launcher
-     * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
+    private ObservableList<dataPack> importData() throws IOException {
+        
+        // variables for file reading
+        
+        ObservableList<dataPack> dataList;
+        ObservableList<dataPack> dataListHelper;
+        String str;
+        String[] tempStr;
+
+        // bufferedreader and dataLists prep
+        BufferedReader file = new BufferedReader(new FileReader("src/cpt/suicide-death-rate-by-age.csv"));
+        dataList = FXCollections.observableArrayList();
+        dataListHelper = FXCollections.observableArrayList();
+
+
+        // Read first line (junk and no data)
+        str = file.readLine();
+
+        // read the actual data
+        while (str != null) {
+            str = file.readLine();
+
+            // Splits by commas and adds substrings to String array
+            tempStr = str.split(",");
+
+            // Create dataPack object and add to observable list
+            dataListHelper.add(new dataPack(tempStr[1], Integer.parseInt(split[0]), Double.parseDouble(split[2])));
+        }
+
+        // Close the file
+        file.close();
+
+        // Return the list of DataPoints
+        return dataList;
+
     }
+
 
 }
