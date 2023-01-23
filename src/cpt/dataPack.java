@@ -20,4 +20,8 @@ public class dataPack {
         return suicideRate;
     }
 
+    public int getYear() {
+        return year;
+    }
+
 }
