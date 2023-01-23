@@ -1,15 +1,16 @@
 package cpt;
 
-import java.util.Arrays;
+import java.util.*;
+import java.io.*;
+
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Series;
 import javafx.stage.Stage;
 
 
@@ -34,7 +35,7 @@ public class ScatterChartApp extends Application {
                                 new Data(6.0, 3.0),
                                 new Data(7.0, 2.0),
                                 new Data(7.8, 4.0));
-        chart = new ScatterChart(xAxis, yAxis);
+        chart = new ScatterChart(xAxisDeathRate1990, yAxisDeathRate2019);
         chart.getData().add(series);
         return chart;
     }
