@@ -16,4 +16,8 @@ public class dataPack {
         return ageRange;
     }
 
+    public double getSuicideRate() {
+        return suicideRate;
+    }
+
 }
