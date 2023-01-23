@@ -12,4 +12,16 @@ public class dataReader {
         this.dblDeath2019 = deathRate2019;
     }
 
+    public String getCountry() {
+        return strCountry;
+    }
+
+    public double getDeath1990() {
+        return dblDeath1990;
+    }
+
+    public double getDeath2019() {
+        return dblDeath2019;
+    }
+
 }
