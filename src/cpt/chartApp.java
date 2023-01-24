@@ -24,6 +24,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 
 public class chartApp extends Application {
@@ -45,18 +48,18 @@ public class chartApp extends Application {
     private TableColumn<dataPack, Double> rateCol;
 
 */
+
+    private dataSort niceData;
     private ScrollPane scrollPane;
     private GridPane grid;
 
-
-    private ArrayList<dataPack> dataPoints;    
+  
 
     @Override public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Suicide death rate by age");
         //primaryStage.show();
-        dataPoints = new ArrayList<dataPack>();
-        readData(dataPoints);
+        readData();
 
         scrollPane = new ScrollPane();
         grid = new GridPane();
@@ -67,8 +70,11 @@ public class chartApp extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        for (int i = 0; i < dataPoints.size(); i ++) {
-            dataPack data = dataPoints.get(i);
+        niceData = new dataSort(readData());
+
+
+        for (int i = 0; i < niceData.getSize(); i ++) {
+            dataPack data = niceData.getDataPoints().get(i);
 
             // Add labels
             // label age range
@@ -85,6 +91,17 @@ public class chartApp extends Application {
 
             
         }
+
+        // button to apply sort
+        Button sortRate = new Button("Sort Suicide Rate");
+        sortRate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                niceData.sort("year", false);
+            }
+        });
+
+        grid.add(sortRate, 4, 0);
 
         Scene scene = new Scene(scrollPane, 555, 555);
         primaryStage.setScene(scene);
@@ -124,7 +141,7 @@ public class chartApp extends Application {
 
 */
 
-    private static void readData(ArrayList<dataPack> dataPoints) throws IOException {
+    private static ArrayList<dataPack> readData() throws IOException {
 
         // variables for file reading
         String str;
@@ -133,9 +150,13 @@ public class chartApp extends Application {
         // bufferedreader and dataLists prep
         BufferedReader file = new BufferedReader(new FileReader("src/cpt/data_shortened.csv"));
 
+        ArrayList<dataPack> tempArrList;
+
         // Read first line (junk and no data)
         str = file.readLine();
 
+
+        tempArrList = new ArrayList<dataPack>();
         // read the actual data
         while (str != null) {
             str = file.readLine();
@@ -147,12 +168,13 @@ public class chartApp extends Application {
             tempStr = str.split(",");
 
             // Create dataPack object
-            dataPoints.add(new dataPack(tempStr[0], Double.parseDouble(tempStr[2]), Integer.parseInt(tempStr[1])));
+            tempArrList.add(new dataPack(tempStr[0], Double.parseDouble(tempStr[2]), Integer.parseInt(tempStr[1])));
 
             
         }
 
         file.close();
+        return tempArrList;
 
     }
 }
