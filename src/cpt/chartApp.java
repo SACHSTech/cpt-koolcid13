@@ -19,6 +19,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.PieChart.Data;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 
 
 public class chartApp extends Application {
@@ -39,11 +44,11 @@ public class chartApp extends Application {
     private TableColumn<dataPack, Integer> yearCol;
     private TableColumn<dataPack, Double> rateCol;
 
-
+*/
     private ScrollPane scrollPane;
     private GridPane grid;
 
-*/
+
     private ArrayList<dataPack> dataPoints;    
 
     @Override public void start(Stage primaryStage) throws Exception {
@@ -53,6 +58,38 @@ public class chartApp extends Application {
         dataPoints = new ArrayList<dataPack>();
         readData(dataPoints);
 
+        scrollPane = new ScrollPane();
+        grid = new GridPane();
+        scrollPane.setContent(grid);
+        grid.setPadding(new Insets(20, 20, 20, 20));
+        grid.setGridLinesVisible(true);
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        for (int i = 0; i < dataPoints.size(); i ++) {
+            dataPack data = dataPoints.get(i);
+
+            // Add labels
+            // label age range
+            Label ageRange = new Label(data.getAge());
+            grid.add(ageRange, 0, i);
+
+            // label year
+            Label year = new Label(String.valueOf(data.getYear()));
+            grid.add(year, 1, i);
+
+            // label suicide rate
+            Label suicideRate = new Label(String.valueOf(data.getSuicideRate()));
+            grid.add(suicideRate, 2, i);
+
+            
+        }
+
+        Scene scene = new Scene(scrollPane, 555, 555);
+        primaryStage.setScene(scene);
+
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
@@ -102,6 +139,9 @@ public class chartApp extends Application {
         // read the actual data
         while (str != null) {
             str = file.readLine();
+            if (str == null || str.equals("")) {
+                break;
+            }
 
             // Splits by commas and adds substrings to String array
             tempStr = str.split(",");
