@@ -17,7 +17,9 @@ public class dataSort {
         return dataPoints;
     }
 
-    
+    public int getSize() {
+        return size;
+    }
 }
 
 
