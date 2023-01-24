@@ -11,6 +11,15 @@ public class dataSort {
         this.dataPoints = dataPoints;
         this.size = dataPoints.size();
     }
+
+
+    public ArrayList<dataPack> getDataPoints() {
+        return dataPoints;
+    }
+
+    
 }
+
+
 
 
