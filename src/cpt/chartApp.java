@@ -64,6 +64,10 @@ public class chartApp extends Application {
 
     @Override public void start(Stage primaryStage) throws Exception {
 
+        primaryStage.setTitle("Suicide death rate by age");
+        ArrayList<dataPack> dataPoints = new ArrayList<dataPack>();
+
+
         datapointTable = new TableView<>();
         ageRangeCol = new TableColumn<>("Age Range");
         yearCol = new TableColumn<>("Year");
@@ -76,25 +80,14 @@ public class chartApp extends Application {
         fiftyTo69 = new XYChart.Series<>();
         seventyPlus = new XYChart.Series<>();
 
-
-        datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
-
-    }
-
-    private ObservableList<dataPack> importData() throws IOException {
         
         // variables for file reading
         
-        ObservableList<dataPack> dataList;
-        ObservableList<dataPack> dataListHelper;
         String str;
         String[] tempStr;
 
         // bufferedreader and dataLists prep
         BufferedReader file = new BufferedReader(new FileReader("src/cpt/suicide-death-rate-by-age.csv"));
-        dataList = FXCollections.observableArrayList();
-        dataListHelper = FXCollections.observableArrayList();
-
 
         // Read first line (junk and no data)
         str = file.readLine();
@@ -106,17 +99,13 @@ public class chartApp extends Application {
             // Splits by commas and adds substrings to String array
             tempStr = str.split(",");
 
-            // Create dataPack object and add to observable list
-            dataListHelper.add(new dataPack(tempStr[1], Integer.parseInt(split[0]), Double.parseDouble(split[2])));
+            // Create dataPack object
+            dataPoints.add(new dataPack(tempStr[0], 0, 0));
         }
 
-        // Close the file
         file.close();
 
-        // Return the list of DataPoints
-        return dataList;
-
     }
-
+    
 
 }
