@@ -3,46 +3,28 @@ package cpt;
 import java.util.*;
 import java.io.*;
 
+import java.util.*;
+import java.io.*;
+
+import java.util.Arrays;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.chart.PieChart.Data;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.geometry.Pos;
-import javafx.geometry.Insets;
 
 
 public class chartApp extends Application {
 
 
-    private XYChart.Series <Integer, Double> fiveTo14;
+    /*private XYChart.Series <Integer, Double> fiveTo14;
     private XYChart.Series <Integer, Double> allAge;
     private XYChart.Series <Integer, Double> ageStandardized;
     private XYChart.Series <Integer, Double> fifteenTo49;
@@ -59,35 +41,34 @@ public class chartApp extends Application {
 
 
     private ScrollPane scrollPane;
-    private ArrayList<dataPack> dataPoints;
-    private static ArrayList<dataPackHelper> dataPointsHelper;
     private GridPane grid;
 
-    /**
-     * Java main for when running without JavaFX launcher
-     * @param args command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
+*/
+    private ArrayList<dataPack> dataPoints;    
 
     @Override public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Suicide death rate by age");
+        //primaryStage.show();
+        dataPoints = new ArrayList<dataPack>();
+        readData(dataPoints);
 
+    }
 
-        scrollPane = new ScrollPane();
+    public static void main(String[] args) {
+        launch(args);
+    }
+        /*scrollPane = new ScrollPane();
         
         grid = new GridPane();
         scrollPane.setContent(grid);
 
 
         dataPoints = new ArrayList<dataPack>();
-        dataPointsHelper = new ArrayList<dataPackHelper>();
+        // dataPointsHelper = new ArrayList<dataPackHelper>();
         readData(dataPoints);
 
-        datapointTable = new TableView<>();
+        /*datapointTable = new TableView<>();
         ageRangeCol = new TableColumn<>("Age Range");
         yearCol = new TableColumn<>("Year");
         rateCol = new TableColumn<>("Suicide Rate");
@@ -100,17 +81,20 @@ public class chartApp extends Application {
         seventyPlus = new XYChart.Series<>();
 
     }
-        
+    
 
-    private static void readData(ArrayList<dataPack> dataPoints) throws Exception {
+}
+
+*/
+
+    private static void readData(ArrayList<dataPack> dataPoints) throws IOException {
 
         // variables for file reading
-        
         String str;
         String[] tempStr;
 
         // bufferedreader and dataLists prep
-        BufferedReader file = new BufferedReader(new FileReader("src/cpt/suicide-death-rate-by-age.csv"));
+        BufferedReader file = new BufferedReader(new FileReader("src/cpt/data_shortened.csv"));
 
         // Read first line (junk and no data)
         str = file.readLine();
@@ -123,12 +107,12 @@ public class chartApp extends Application {
             tempStr = str.split(",");
 
             // Create dataPack object
-            dataPointsHelper.add(new dataPackHelper(tempStr[0], 0, 0, 0, 1, 1, 1, 1));
+            dataPoints.add(new dataPack(tempStr[0], Double.parseDouble(tempStr[2]), Integer.parseInt(tempStr[1])));
+
+            
         }
 
         file.close();
 
     }
-    
-
 }
