@@ -18,6 +18,8 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tab;
@@ -30,6 +32,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 
 
 public class chartApp extends Application {
@@ -51,7 +58,10 @@ public class chartApp extends Application {
     private TableColumn<dataPack, Double> rateCol;
 
 
-
+    private ScrollPane scrollPane;
+    private ArrayList<dataPack> dataPoints;
+    private static ArrayList<dataPackHelper> dataPointsHelper;
+    private GridPane grid;
 
     /**
      * Java main for when running without JavaFX launcher
@@ -65,8 +75,17 @@ public class chartApp extends Application {
     @Override public void start(Stage primaryStage) throws Exception {
 
         primaryStage.setTitle("Suicide death rate by age");
-        ArrayList<dataPack> dataPoints = new ArrayList<dataPack>();
 
+
+        scrollPane = new ScrollPane();
+        
+        grid = new GridPane();
+        scrollPane.setContent(grid);
+
+
+        dataPoints = new ArrayList<dataPack>();
+        dataPointsHelper = new ArrayList<dataPackHelper>();
+        readData(dataPoints);
 
         datapointTable = new TableView<>();
         ageRangeCol = new TableColumn<>("Age Range");
@@ -80,7 +99,11 @@ public class chartApp extends Application {
         fiftyTo69 = new XYChart.Series<>();
         seventyPlus = new XYChart.Series<>();
 
+    }
         
+
+    private static void readData(ArrayList<dataPack> dataPoints) throws Exception {
+
         // variables for file reading
         
         String str;
@@ -100,7 +123,7 @@ public class chartApp extends Application {
             tempStr = str.split(",");
 
             // Create dataPack object
-            dataPoints.add(new dataPack(tempStr[0], 0, 0));
+            dataPointsHelper.add(new dataPackHelper(tempStr[0], 0, 0, 0, 1, 1, 1, 1));
         }
 
         file.close();
