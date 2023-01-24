@@ -20,6 +20,10 @@ public class dataSort {
     public int getSize() {
         return size;
     }
+
+    public void addData(dataPack data) {
+        dataPoints.add(data);
+    }
 }
 
 
