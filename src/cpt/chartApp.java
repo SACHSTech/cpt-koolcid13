@@ -71,6 +71,13 @@ public class chartApp extends Application {
         // create table and add cols
         datapointTable = new TableView<>();
         datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
+        datapointTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        ageRangeCol.setResizable(false);
+        yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        yearCol.setResizable(false);
+        rateCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        rateCol.setResizable(false);
 
         
         niceData = new dataSort(readData());
@@ -94,8 +101,9 @@ public class chartApp extends Application {
                     datapointCell = new TableView<>();
                     datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
                     datapointCell.getItems().add(row.getItem());
+                    datapointCell.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-                    Scene cellScene = new Scene(datapointCell, 300, 50);
+                    Scene cellScene = new Scene(datapointCell, 300, 70);
                     popUp.setScene(cellScene);
                     popUp.show();
 
