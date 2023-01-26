@@ -19,14 +19,15 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.PieChart.Data;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 
 public class chartApp extends Application {
@@ -42,15 +43,17 @@ public class chartApp extends Application {
     private HBox filtHBox;
     private HBox screenHBox;
 
+    
+
+*/
+
     private TableView<dataPack> datapointTable;
+    private ObservableList<dataPack> tableSource;
     private TableColumn<dataPack, String> ageRangeCol;
     private TableColumn<dataPack, Integer> yearCol;
     private TableColumn<dataPack, Double> rateCol;
 
-*/
-
     private dataSort niceData;
-    private ScrollPane scrollPane;
     private GridPane grid;
 
   
@@ -59,36 +62,24 @@ public class chartApp extends Application {
 
         primaryStage.setTitle("Suicide death rate by age");
         //primaryStage.show();
-        readData();
 
-        scrollPane = new ScrollPane();
-        grid = new GridPane();
-        scrollPane.setContent(grid);
-        grid.setPadding(new Insets(20, 20, 20, 20));
-        grid.setGridLinesVisible(true);
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
+        ageRangeCol = new TableColumn<>("Age Range");
+        ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("ageRange"));
+        yearCol = new TableColumn<>("Year");
+        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+        rateCol = new TableColumn<>("Suicide Rate");
+        rateCol.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
 
-        niceData = new dataSort(readData());
+        // create table and add cols
+        datapointTable = new TableView<>();
+        datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
+
+        tableSource = readData();
+        datapointTable.setItems(tableSource);
 
 
         for (int i = 0; i < niceData.getSize(); i ++) {
             dataPack data = niceData.getDataPoints().get(i);
-
-            // Add labels
-            // label age range
-            Label ageRange = new Label(data.getAge());
-            grid.add(ageRange, 0, i);
-
-            // label year
-            Label year = new Label(String.valueOf(data.getYear()));
-            grid.add(year, 1, i);
-
-            // label suicide rate
-            Label suicideRate = new Label(String.valueOf(data.getSuicideRate()));
-            grid.add(suicideRate, 2, i);
-
             
         }
 
@@ -101,47 +92,27 @@ public class chartApp extends Application {
             }
         });
 
-        grid.add(sortRate, 4, 0);
+        // create scene with table
+        Scene scene = new Scene(datapointTable, 555, 555);
 
-        Scene scene = new Scene(scrollPane, 555, 555);
         primaryStage.setScene(scene);
-
         primaryStage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-        /*scrollPane = new ScrollPane();
-        
-        grid = new GridPane();
-        scrollPane.setContent(grid);
-
-
-        dataPoints = new ArrayList<dataPack>();
-        // dataPointsHelper = new ArrayList<dataPackHelper>();
-        readData(dataPoints);
-
-        /*datapointTable = new TableView<>();
-        ageRangeCol = new TableColumn<>("Age Range");
-        yearCol = new TableColumn<>("Year");
-        rateCol = new TableColumn<>("Suicide Rate");
+/*       
 
         fiveTo14 = new XYChart.Series<>();
         allAge = new XYChart.Series<>();
         ageStandardized = new XYChart.Series<>();
         fifteenTo49 = new XYChart.Series<>();
         fiftyTo69 = new XYChart.Series<>();
-        seventyPlus = new XYChart.Series<>();
+        seventyPlus = new XYChart.Series<>();*/    
 
-    }
-    
 
-}
-
-*/
-
-    private static ArrayList<dataPack> readData() throws IOException {
+    private static ObservableList<dataPack> readData() throws IOException {
 
         // variables for file reading
         String str;
@@ -150,13 +121,13 @@ public class chartApp extends Application {
         // bufferedreader and dataLists prep
         BufferedReader file = new BufferedReader(new FileReader("src/cpt/data_shortened.csv"));
 
-        ArrayList<dataPack> tempArrList;
+        ObservableList<dataPack> tempArrList;
 
         // Read first line (junk and no data)
         str = file.readLine();
 
 
-        tempArrList = new ArrayList<dataPack>();
+        tempArrList = FXCollections.observableArrayList();
         // read the actual data
         while (str != null) {
             str = file.readLine();
