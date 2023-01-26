@@ -1,19 +1,21 @@
 package cpt;
 
 import java.util.*;
+import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 
 
 public class dataSort {
-    private ArrayList<dataPack> dataPoints;
+    private ObservableList<dataPack> dataPoints;
     private int size;
 
-    public dataSort(ArrayList<dataPack> dataPoints) {
+    public dataSort(ObservableList<dataPack> dataPoints) {
         this.dataPoints = dataPoints;
         this.size = dataPoints.size();
     }
 
 
-    public ArrayList<dataPack> getDataPoints() {
+    public ObservableList<dataPack> getDataPoints() {
         return dataPoints;
     }
 

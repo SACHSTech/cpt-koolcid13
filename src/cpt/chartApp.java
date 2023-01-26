@@ -48,13 +48,10 @@ public class chartApp extends Application {
 */
 
     private TableView<dataPack> datapointTable;
-    private ObservableList<dataPack> tableSource;
     private TableColumn<dataPack, String> ageRangeCol;
     private TableColumn<dataPack, Integer> yearCol;
     private TableColumn<dataPack, Double> rateCol;
-
     private dataSort niceData;
-    private GridPane grid;
 
   
 
@@ -64,7 +61,7 @@ public class chartApp extends Application {
         //primaryStage.show();
 
         ageRangeCol = new TableColumn<>("Age Range");
-        ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("ageRange"));
+        ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("age"));
         yearCol = new TableColumn<>("Year");
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
         rateCol = new TableColumn<>("Suicide Rate");
@@ -74,8 +71,9 @@ public class chartApp extends Application {
         datapointTable = new TableView<>();
         datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
 
-        tableSource = readData();
-        datapointTable.setItems(tableSource);
+        
+        niceData = new dataSort(readData());
+        datapointTable.setItems(niceData.getDataPoints());
 
 
         for (int i = 0; i < niceData.getSize(); i ++) {
