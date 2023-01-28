@@ -1,7 +1,14 @@
 package cpt;
 
+/**
+* dataPack file, for every dataset line
+* @author: Avin A.
+*
+*/
+
 public class dataPack {
     
+    // instance vars
     private String ageRange;
     private double suicideRate;
     private int year;

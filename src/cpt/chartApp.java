@@ -20,10 +20,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+* A program that visualizes rates of suicide worldwide over the past 10 years among different age groups using line chart and pie chart graphs
+* @author: Avin A.
+*
+*/
 
 
 public class chartApp extends Application {
-
+    // declare table variables for main and individual data tables
     private TableView<dataPack> datapointTable;
     private TableView<dataPack> datapointCell;
     private TableColumn<dataPack, String> ageRangeCol;
@@ -32,9 +37,12 @@ public class chartApp extends Application {
     private TableColumn<dataPack, String> ageRangeCol2;
     private TableColumn<dataPack, Integer> yearCol2;
     private TableColumn<dataPack, Double> rateCol2;
+
+    // declare Hbox and Vbox
     private HBox screenHBox;
     private VBox databaseVBox;
 
+    // declare line chart variables
     private LineChart<Integer, Double> lineChart;
     private NumberAxis xAxis;
     private NumberAxis yAxis;
@@ -45,6 +53,7 @@ public class chartApp extends Application {
     private XYChart.Series <Integer, Double> fiftyTo69;
     private XYChart.Series <Integer, Double> seventyPlus;
     
+    // declare dataset var, chart objects, tab vars
     private dataSort niceData;
     private Parent mainLineChart;
     private Parent mainPieChart;
@@ -52,6 +61,7 @@ public class chartApp extends Application {
     private Tab lineTab;
     private Tab pieTab;
     
+    // stage and scene declaration
     private Stage popUpStage;
     private Scene mainScene;
     private Scene popUpScene;
@@ -60,10 +70,11 @@ public class chartApp extends Application {
 
     @Override public void start(Stage primaryStage) throws Exception {
 
+        // initialize hbox and vbox vars
         screenHBox = new HBox(1);
         databaseVBox = new VBox(20);
 
-        // create table and add cols
+        // create table and columns
         datapointTable = new TableView<>();
         datapointCell = new TableView<>();
         ageRangeCol = new TableColumn<>("Age Range");
@@ -73,7 +84,7 @@ public class chartApp extends Application {
         yearCol2 = new TableColumn<>("Year");
         rateCol2 = new TableColumn<>("Suicide Rate");
         
-        
+        // create line chart variable objects and set name
         fiveTo14 = new XYChart.Series<>();
         fiveTo14.setName("5 - 14 years old");
         fifteenTo49 = new XYChart.Series<>();
@@ -85,20 +96,24 @@ public class chartApp extends Application {
         allAge = new XYChart.Series<>();
         allAge.setName("15 - 49 years old");
 
-
+        // read data to dataset var
         niceData = new dataSort(readData());
 
+        // call functions to show graphs
         mainLineChart = showLineGraph();
         mainPieChart = showPieChart();
         
+        // tab initializations
         tabPane = new TabPane();
         lineTab = new Tab("Line chart", mainLineChart);
         pieTab = new Tab("Pie chart", mainPieChart);
 
+        // stage and scene initializations
         popUpStage = new Stage();
         mainScene = new Scene(screenHBox);
         popUpScene = new Scene(datapointCell, 400, 80);
 
+        // fill columns
         ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("age"));
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
         rateCol.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
@@ -106,7 +121,7 @@ public class chartApp extends Application {
         yearCol2.setCellValueFactory(new PropertyValueFactory<>("year"));
         rateCol2.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
 
-        
+        // adjust width of tables
         ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.4));
         yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.15));
         rateCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.2));
@@ -121,22 +136,28 @@ public class chartApp extends Application {
         yearCol2.setResizable(false);
         rateCol2.setResizable(false);
         
+        // add data that was read to tables
         datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
         datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
+        // remove additional columns
         datapointTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         datapointCell.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        // fill table with the data points
         datapointTable.setItems(niceData.getDataPoints());
 
+        // add tabs to tabpane
         tabPane.getTabs().addAll(lineTab, pieTab);
 
+        // add nodes
         databaseVBox.getChildren().addAll(datapointTable);
         screenHBox.getChildren().addAll(tabPane, databaseVBox);
 
-        
+        // stage config
         popUpStage.setTitle("Individual cell data");
         popUpStage.setScene(popUpScene);
 
+        // double click detect for individual data cells popup
         datapointTable.setRowFactory( tv -> {
             TableRow<dataPack> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -152,6 +173,7 @@ public class chartApp extends Application {
             return row ;
         });
 
+        // primary stage config
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("Suicide Rate over Time");
         primaryStage.show();
@@ -173,14 +195,12 @@ public class chartApp extends Application {
 
         // bufferedreader and dataLists prep
         BufferedReader file = new BufferedReader(new FileReader("src/cpt/data_shortened.csv"));
-
         ObservableList<dataPack> tempArrList;
 
         // Read first line (junk and no data)
         str = file.readLine();
-
-
         tempArrList = FXCollections.observableArrayList();
+
         // read the actual data
         while (str != null) {
             str = file.readLine();
@@ -193,23 +213,24 @@ public class chartApp extends Application {
 
             // Create dataPack object
             tempArrList.add(new dataPack(tempStr[0], Double.parseDouble(tempStr[2]), Integer.parseInt(tempStr[1])));
-
-            
         }
 
         file.close();
-        return tempArrList;
 
+        // return statement
+        return tempArrList;
     }
 
     public Parent showLineGraph() {
 
+        // var initialization
         xAxis = new NumberAxis("Year", 2010, 2019, 1);
         yAxis = new NumberAxis("Suicide Rate", 0, 7000, 500);
+
         lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle("Suicide rate by year");
 
-
+        // add data to line chart
         for (dataPack datapoint: niceData.getDataPoints()) {
             switch (datapoint.getAge()) {
                 case "5 - 14 years old" :
@@ -229,23 +250,21 @@ public class chartApp extends Application {
                     break;
             }
         }
-
         lineChart.getData().addAll(fiveTo14, fifteenTo49, fiftyTo69, seventyPlus, allAge);
 
+        // return statement
         return lineChart;
-
-
     }
 
     public Parent showPieChart() {
+
+        // var initialization
         PieChart pieChart;
         String ageRanges[] = {"5 - 14 years old", "15 - 49 years old", "50 - 69 years old", "70+ years old", "All ages"};
-        double pieTotal[];
+        double pieTotal[] = new double[5];
         ObservableList <PieChart.Data> pieChartData;
 
-        
-        pieTotal = new double[5];
-
+        // add data to pie chart
         for (dataPack data: niceData.getDataPoints()) {
             for (int i = 0; i < 5; i++) {
                 if (data.getAge().equals(ageRanges[i])) {
@@ -262,10 +281,11 @@ public class chartApp extends Application {
         new PieChart.Data("All ages", pieTotal[4])
         );
 
-        
+        // pie chart initialization
         pieChart = new PieChart(pieChartData);
         pieChart.setTitle("Suicide Rate by age");
 
+        // return statement
         return pieChart;
 
     }

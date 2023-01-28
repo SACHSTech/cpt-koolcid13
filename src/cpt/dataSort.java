@@ -3,7 +3,15 @@ package cpt;
 import java.util.*;
 import javafx.collections.ObservableList;
 
+/**
+* dataSort file, for dataset and sort methods
+* @author: Avin A.
+*
+*/
+
 public class dataSort {
+
+    // instance vars
     private ObservableList<dataPack> dataPoints;
     private int size;
 
