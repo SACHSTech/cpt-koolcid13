@@ -14,18 +14,19 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.event.EventHandler;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.Tab;
+import javafx.scene.layout.HBox;
 
 
 
@@ -39,14 +40,16 @@ public class chartApp extends Application {
     private TableColumn<dataPack, String> ageRangeCol2;
     private TableColumn<dataPack, Integer> yearCol2;
     private TableColumn<dataPack, Double> rateCol2;
+    private HBox screenHBox;
 
-    private LineChart<Integer, Double> lineChart;
-    private NumberAxis xAxis;
-    private NumberAxis yAxis;
     private ObservableList<XYChart.Series<Integer, Double>> lineChartData;
     private PieChart pieChart;
 
 
+    private LineChart<Integer, Double> lineChart;
+    private NumberAxis xAxis;
+    private NumberAxis yAxis;
+    
     private XYChart.Series <Integer, Double> fiveTo14;
     private XYChart.Series <Integer, Double> allAge;
     private XYChart.Series <Integer, Double> fifteenTo49;
@@ -54,11 +57,21 @@ public class chartApp extends Application {
     private XYChart.Series <Integer, Double> seventyPlus;
     
     private dataSort niceData;
-    private Stage popUp;
+    private Parent mainLineChart;
+    private Parent mainPieChart;
+    private TabPane tabPane;
+    private Tab lineTab;
+    private Tab pieTab;
+    
+    private Stage popUpStage;
+    private Scene mainScene;
+    private Scene popUpScene;
 
   
 
     @Override public void start(Stage primaryStage) throws Exception {
+
+        screenHBox = new HBox(30);
 
         primaryStage.setTitle("Suicide death rate by age");
         //primaryStage.show();
@@ -90,9 +103,6 @@ public class chartApp extends Application {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     
-                    popUp = new Stage();
-                    popUp.setTitle("Individual cell data");
-
                     ageRangeCol2 = new TableColumn<>("Age Range");
                     ageRangeCol2.setCellValueFactory(new PropertyValueFactory<>("age"));
                     yearCol2 = new TableColumn<>("Year");
@@ -102,33 +112,26 @@ public class chartApp extends Application {
 
                     datapointCell = new TableView<>();
                     datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
+
                     datapointCell.getItems().clear();
                     datapointCell.getItems().add(row.getItem());
                     datapointCell.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-                    Scene cellScene = new Scene(datapointCell, 300, 70);
-                    popUp.setScene(cellScene);
-                    popUp.show();
+                    popUpStage.show();
 
                 }
             });
             return row ;
         });
 
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("Suicide Rate over Time");
+        primaryStage.show();
+
         for (int i = 0; i < niceData.getSize(); i ++) {
             dataPack data = niceData.getDataPoints().get(i);
             
         }
-
-        /*// button to apply sort
-        Button sortRate = new Button("Sort Suicide Rate");
-        sortRate.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                niceData.sort("year", false);
-            }
-        });
-        */
 
         // create scene with table
         Scene scene = new Scene(datapointTable, 555, 555);
@@ -136,15 +139,25 @@ public class chartApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Scene lineScene = new Scene(showLineGraph());
-        Stage lineStage = new Stage();
-        lineStage.setScene(lineScene);
-        lineStage.show();
+        mainLineChart = showLineGraph();
+        mainPieChart = showPieChart();
 
-        Scene pieScene = new Scene(showPieChart());
-        Stage pieStage = new Stage();
-        pieStage.setScene(pieScene);
-        pieStage.show();
+        tabPane = new TabPane();
+        lineTab = new Tab("Line chart", mainLineChart);
+        pieTab = new Tab("Pie chart", mainPieChart);
+
+        
+        popUpStage = new Stage();
+        popUpStage.setTitle("Individual cell data");
+
+        mainScene = new Scene(screenHBox);
+        popUpScene = new Scene(datapointTable, 400, 50);
+        
+        popUpStage.setScene(popUpScene);
+
+        tabPane.getTabs().addAll(lineTab, pieTab);
+
+        
     }
 
 
@@ -191,7 +204,7 @@ public class chartApp extends Application {
     }
 
     public Parent showLineGraph() {
-        
+
         xAxis = new NumberAxis("Year", 2010, 2019, 1);
         yAxis = new NumberAxis("Suicide Rate", 0, 7000, 500);
         lineChart = new LineChart(xAxis, yAxis);
