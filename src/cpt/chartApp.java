@@ -13,12 +13,14 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.PieChart.Data;
+import javafx.scene.chart.XYChart.Data;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -28,21 +30,6 @@ import javafx.util.Callback;
 
 public class chartApp extends Application {
 
-
-    /*private XYChart.Series <Integer, Double> fiveTo14;
-    private XYChart.Series <Integer, Double> allAge;
-    private XYChart.Series <Integer, Double> ageStandardized;
-    private XYChart.Series <Integer, Double> fifteenTo49;
-    private XYChart.Series <Integer, Double> fiftyTo69;
-    private XYChart.Series <Integer, Double> seventyPlus;
-
-    private HBox filtHBox;
-    private HBox screenHBox;
-
-    
-
-*/
-
     private TableView<dataPack> datapointTable;
     private TableView<dataPack> datapointCell;
     private TableColumn<dataPack, String> ageRangeCol;
@@ -51,6 +38,18 @@ public class chartApp extends Application {
     private TableColumn<dataPack, String> ageRangeCol2;
     private TableColumn<dataPack, Integer> yearCol2;
     private TableColumn<dataPack, Double> rateCol2;
+
+    private LineChart<Integer, Double> lineChart;
+    private NumberAxis xAxis;
+    private NumberAxis yAxis;
+    private ObservableList<XYChart.Series<Integer, Double>> lineChartData;
+
+    private XYChart.Series <Integer, Double> fiveTo14;
+    private XYChart.Series <Integer, Double> allAge;
+    private XYChart.Series <Integer, Double> fifteenTo49;
+    private XYChart.Series <Integer, Double> fiftyTo69;
+    private XYChart.Series <Integer, Double> seventyPlus;
+    
     private dataSort niceData;
     private Stage popUp;
 
@@ -100,6 +99,7 @@ public class chartApp extends Application {
 
                     datapointCell = new TableView<>();
                     datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
+                    datapointCell.getItems().clear();
                     datapointCell.getItems().add(row.getItem());
                     datapointCell.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -131,19 +131,16 @@ public class chartApp extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        Stage lineScene = new Stage();
+        Scene scene2 = new Scene(showLineGraph());
+        lineScene.setScene(scene2);
+        lineScene.show();
     }
 
     public static void main(String[] args) {
         launch(args);
-    }
-/*       
-
-        fiveTo14 = new XYChart.Series<>();
-        allAge = new XYChart.Series<>();
-        ageStandardized = new XYChart.Series<>();
-        fifteenTo49 = new XYChart.Series<>();
-        fiftyTo69 = new XYChart.Series<>();
-        seventyPlus = new XYChart.Series<>();*/    
+    } 
 
 
     private static ObservableList<dataPack> readData() throws IOException {
@@ -180,6 +177,50 @@ public class chartApp extends Application {
 
         file.close();
         return tempArrList;
+
+    }
+
+    public Parent showLineGraph() {
+        
+        xAxis = new NumberAxis("Year", 2010, 2019, 1);
+        yAxis = new NumberAxis("Suicide Rate", 0, 7000, 500);
+        lineChart = new LineChart(xAxis, yAxis);
+
+        fiveTo14 = new XYChart.Series<>();
+        fiveTo14.setName("5-14 years old");
+        allAge = new XYChart.Series<>();
+        allAge.setName("5-14 years old");
+        fifteenTo49 = new XYChart.Series<>();
+        fifteenTo49.setName("5-14 years old");
+        fiftyTo69 = new XYChart.Series<>();
+        fiftyTo69.setName("5-14 years old");
+        seventyPlus = new XYChart.Series<>();
+        seventyPlus.setName("5-14 years old");
+
+        for (dataPack datapoint: niceData.getDataPoints()) {
+            switch (datapoint.getAge()) {
+                case "5 - 14 years old" :
+                    fiveTo14.getData().add(new XYChart.Data<Integer, Double>(datapoint.getYear(), datapoint.getSuicideRate()));
+                    break;
+                case "15 - 49 years old" :
+                    fifteenTo49.getData().add(new XYChart.Data<Integer, Double>(datapoint.getYear(), datapoint.getSuicideRate()));
+                    break;
+                case "50 - 69 years old" :
+                    fiftyTo69.getData().add(new XYChart.Data<Integer, Double>(datapoint.getYear(), datapoint.getSuicideRate()));
+                    break;
+                case "70+ years old" :
+                    seventyPlus.getData().add(new XYChart.Data<Integer, Double>(datapoint.getYear(), datapoint.getSuicideRate()));
+                    break;
+                default:
+                    allAge.getData().add(new XYChart.Data<Integer, Double>(datapoint.getYear(), datapoint.getSuicideRate()));
+                    break;
+            }
+        }
+
+        lineChart.getData().addAll(fiveTo14, fifteenTo49, fiftyTo69, seventyPlus, allAge);
+
+        return lineChart;
+
 
     }
 }
