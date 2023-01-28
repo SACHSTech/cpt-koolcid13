@@ -10,12 +10,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
@@ -26,6 +26,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+
 
 
 public class chartApp extends Application {
@@ -43,6 +44,8 @@ public class chartApp extends Application {
     private NumberAxis xAxis;
     private NumberAxis yAxis;
     private ObservableList<XYChart.Series<Integer, Double>> lineChartData;
+    private PieChart pieChart;
+
 
     private XYChart.Series <Integer, Double> fiveTo14;
     private XYChart.Series <Integer, Double> allAge;
@@ -132,11 +135,17 @@ public class chartApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Stage lineScene = new Stage();
-        Scene scene2 = new Scene(showLineGraph());
-        lineScene.setScene(scene2);
-        lineScene.show();
+        Scene lineScene = new Scene(showLineGraph());
+        Stage lineStage = new Stage();
+        lineStage.setScene(lineScene);
+        lineStage.show();
+
+        Scene pieScene = new Scene(showPieChart());
+        Stage pieStage = new Stage();
+        pieStage.setScene(pieScene);
+        pieStage.show();
     }
+
 
     public static void main(String[] args) {
         launch(args);
@@ -185,17 +194,18 @@ public class chartApp extends Application {
         xAxis = new NumberAxis("Year", 2010, 2019, 1);
         yAxis = new NumberAxis("Suicide Rate", 0, 7000, 500);
         lineChart = new LineChart(xAxis, yAxis);
+        lineChart.setTitle("Suicide rate by year");
 
         fiveTo14 = new XYChart.Series<>();
-        fiveTo14.setName("5-14 years old");
-        allAge = new XYChart.Series<>();
-        allAge.setName("5-14 years old");
+        fiveTo14.setName("5 - 14 years old");
         fifteenTo49 = new XYChart.Series<>();
-        fifteenTo49.setName("5-14 years old");
+        fifteenTo49.setName("50 - 69 years old");
         fiftyTo69 = new XYChart.Series<>();
-        fiftyTo69.setName("5-14 years old");
+        fiftyTo69.setName("70+ years old");
         seventyPlus = new XYChart.Series<>();
-        seventyPlus.setName("5-14 years old");
+        seventyPlus.setName("All ages");
+        allAge = new XYChart.Series<>();
+        allAge.setName("15 - 49 years old");
 
         for (dataPack datapoint: niceData.getDataPoints()) {
             switch (datapoint.getAge()) {
@@ -223,4 +233,38 @@ public class chartApp extends Application {
 
 
     }
+
+    public Parent showPieChart() {
+        PieChart finalPieChart;
+        String ageRanges[] = {"5 - 14 years old", "15 - 49 years old", "50 - 69 years old", "70+ years old", "All ages"};
+        double pieTotal[];
+        ObservableList <PieChart.Data> pieChartData;
+
+        
+        pieTotal = new double[5];
+
+        for (dataPack data: niceData.getDataPoints()) {
+            for (int i = 0; i < 5; i++) {
+                if (data.getAge().equals(ageRanges[i])) {
+                    pieTotal[i] += data.getSuicideRate();
+                }
+            }
+        }
+
+        pieChartData = FXCollections.observableArrayList(
+        new PieChart.Data("5 - 14 years old", pieTotal[0]),
+        new PieChart.Data("15 - 49 years old", pieTotal[1]),
+        new PieChart.Data("50 - 69 years old", pieTotal[2]),
+        new PieChart.Data("70+ years old", pieTotal[3]),
+        new PieChart.Data("All ages", pieTotal[4])
+        );
+
+        
+        finalPieChart = new PieChart(pieChartData);
+        finalPieChart.setTitle("Suicide Rate by age");
+
+        return finalPieChart;
+
+    }
+
 }
