@@ -1,29 +1,20 @@
 package cpt;
 
-import java.util.*;
-import java.io.*;
-
-import java.util.*;
 import java.io.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.PieChart;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.event.EventHandler;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.HBox;
@@ -43,11 +34,6 @@ public class chartApp extends Application {
     private TableColumn<dataPack, Double> rateCol2;
     private HBox screenHBox;
     private VBox databaseVBox;
-    private VBox graphVBox;
-
-    private ObservableList<XYChart.Series<Integer, Double>> lineChartData;
-    private PieChart pieChart;
-
 
     private LineChart<Integer, Double> lineChart;
     private NumberAxis xAxis;
@@ -74,9 +60,8 @@ public class chartApp extends Application {
 
     @Override public void start(Stage primaryStage) throws Exception {
 
-        screenHBox = new HBox(30);
-        databaseVBox = new VBox(10);
-        graphVBox = new VBox(10);
+        screenHBox = new HBox(1);
+        databaseVBox = new VBox(20);
 
         // create table and add cols
         datapointTable = new TableView<>();
@@ -112,7 +97,7 @@ public class chartApp extends Application {
 
         popUpStage = new Stage();
         mainScene = new Scene(screenHBox);
-        popUpScene = new Scene(datapointTable, 400, 50);
+        popUpScene = new Scene(datapointCell, 400, 80);
 
         ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("age"));
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -122,16 +107,16 @@ public class chartApp extends Application {
         rateCol2.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
 
         
-        ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.45));
-        yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.2));
-        rateCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.4));
+        yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.15));
+        rateCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.2));
         ageRangeCol.setResizable(false);
         yearCol.setResizable(false);
         rateCol.setResizable(false);
 
-        ageRangeCol2.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
-        yearCol2.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
-        rateCol2.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        ageRangeCol2.prefWidthProperty().bind(datapointCell.widthProperty().multiply(0.3));
+        yearCol2.prefWidthProperty().bind(datapointCell.widthProperty().multiply(0.3));
+        rateCol2.prefWidthProperty().bind(datapointCell.widthProperty().multiply(0.3));
         ageRangeCol2.setResizable(false);
         yearCol2.setResizable(false);
         rateCol2.setResizable(false);
@@ -170,11 +155,6 @@ public class chartApp extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("Suicide Rate over Time");
         primaryStage.show();
-
-        for (int i = 0; i < niceData.getSize(); i ++) {
-            dataPack data = niceData.getDataPoints().get(i);
-            
-        }
 
 
     }
@@ -258,7 +238,7 @@ public class chartApp extends Application {
     }
 
     public Parent showPieChart() {
-        PieChart finalPieChart;
+        PieChart pieChart;
         String ageRanges[] = {"5 - 14 years old", "15 - 49 years old", "50 - 69 years old", "70+ years old", "All ages"};
         double pieTotal[];
         ObservableList <PieChart.Data> pieChartData;
@@ -283,10 +263,10 @@ public class chartApp extends Application {
         );
 
         
-        finalPieChart = new PieChart(pieChartData);
-        finalPieChart.setTitle("Suicide Rate by age");
+        pieChart = new PieChart(pieChartData);
+        pieChart.setTitle("Suicide Rate by age");
 
-        return finalPieChart;
+        return pieChart;
 
     }
 
