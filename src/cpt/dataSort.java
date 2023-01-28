@@ -15,29 +15,66 @@ public class dataSort {
     private ObservableList<dataPack> dataPoints;
     private int size;
 
+    /**
+     * constructor method, for dataset as a whole
+     * 
+     * @param dataPoints observableList of data points
+     * 
+     */
     public dataSort(ObservableList<dataPack> dataPoints) {
         this.dataPoints = dataPoints;
         this.size = dataPoints.size();
     }
 
-
+    /**
+     * getter method for dataPoints
+     * 
+     * @return dataPoints
+     */
     public ObservableList<dataPack> getDataPoints() {
         return dataPoints;
     }
 
+    /**
+     * getter method for size
+     * 
+     * @return size
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * method to add datapoint
+     * 
+     * @param data data to be added
+     * 
+     */
     public void addData(dataPack data) {
         dataPoints.add(data);
     }
 
-    // reverse for both ascendind and descending merge sort
+    /**
+     * sort method that overrides the built-in sort function
+     * 
+     * @param sortBy identifies what to sort by
+     * @param reverse identifies if sort has to be ascending or descending
+     * 
+     */
     public void sort(String sortBy, boolean reverse) {
         mergeSort (new ArrayList<dataPack>(dataPoints), 0, size - 1, sortBy, reverse);
     }
 
+    /**
+     * recursive merge sort method
+     * 
+     * @param preMerge what is to be sorted
+     * @param from beginning index
+     * @param to ending index
+     * @param sortBy identifies what to sort the array by
+     * @param reverse identifies ascending or descending sort
+     * 
+     */
     private void mergeSort(ArrayList<dataPack> preMerge, int from, int to, String sortBy, boolean reverse) {
         if (to - from >= 1) {
             int mid = (from + to) / 2;
@@ -49,6 +86,17 @@ public class dataSort {
         }
     }
 
+    /**
+     * merge method to combine arrays
+     * 
+     * @param preMerge what is to be sorted
+     * @param from beginning index
+     * @param mid middle index
+     * @param to ending index
+     * @param sortBy identifies what to sort the array by
+     * @param reverse identifies ascending or descending sort
+     * 
+     */
     private void merge (ArrayList<dataPack> preMerge, int from, int mid, int to, String sortBy, boolean reverse) {
         int i = from;
         int j = mid + 1;

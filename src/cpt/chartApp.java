@@ -66,7 +66,11 @@ public class chartApp extends Application {
     private Scene mainScene;
     private Scene popUpScene;
 
-  
+    /**
+     * start method
+     * 
+     * @param primaryStage the primary stage
+     */
 
     @Override public void start(Stage primaryStage) throws Exception {
 
@@ -181,12 +185,19 @@ public class chartApp extends Application {
 
     }
 
-
+    /**
+     * The main method
+     * 
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
-
+    /**
+     * reads csv file
+     * 
+     * @return data converted to observablelist form
+     */
     private static ObservableList<dataPack> readData() throws IOException {
 
         // variables for file reading
@@ -221,6 +232,11 @@ public class chartApp extends Application {
         return tempArrList;
     }
 
+    /**
+     * creates line graph for the data points
+     * 
+     * @return line graph (parent obj)
+     */
     public Parent showLineGraph() {
 
         // var initialization
@@ -256,6 +272,11 @@ public class chartApp extends Application {
         return lineChart;
     }
 
+    /**
+     * creates pie graph for the data points
+     * 
+     * @return pie graph (parent obj)
+     */
     public Parent showPieChart() {
 
         // var initialization
