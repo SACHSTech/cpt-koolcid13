@@ -122,12 +122,19 @@ public class chartApp extends Application {
         rateCol2.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
 
         
-        ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
-        ageRangeCol.setResizable(false);
-        yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
-        yearCol.setResizable(false);
+        ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.45));
+        yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.2));
         rateCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        ageRangeCol.setResizable(false);
+        yearCol.setResizable(false);
         rateCol.setResizable(false);
+
+        ageRangeCol2.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        yearCol2.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        rateCol2.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
+        ageRangeCol2.setResizable(false);
+        yearCol2.setResizable(false);
+        rateCol2.setResizable(false);
         
         datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
         datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
@@ -169,14 +176,7 @@ public class chartApp extends Application {
             
         }
 
-        
 
-        // create scene with table
-        Scene scene = new Scene(datapointTable, 555, 555);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        
     }
 
 
