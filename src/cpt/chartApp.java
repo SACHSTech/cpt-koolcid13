@@ -27,6 +27,7 @@ import javafx.util.Callback;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 
 
@@ -41,6 +42,8 @@ public class chartApp extends Application {
     private TableColumn<dataPack, Integer> yearCol2;
     private TableColumn<dataPack, Double> rateCol2;
     private HBox screenHBox;
+    private VBox databaseVBox;
+    private VBox graphVBox;
 
     private ObservableList<XYChart.Series<Integer, Double>> lineChartData;
     private PieChart pieChart;
@@ -72,6 +75,8 @@ public class chartApp extends Application {
     @Override public void start(Stage primaryStage) throws Exception {
 
         screenHBox = new HBox(30);
+        databaseVBox = new VBox(10);
+        graphVBox = new VBox(10);
 
         // create table and add cols
         datapointTable = new TableView<>();
@@ -108,7 +113,7 @@ public class chartApp extends Application {
         popUpStage = new Stage();
         mainScene = new Scene(screenHBox);
         popUpScene = new Scene(datapointTable, 400, 50);
-        
+
         ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("age"));
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
         rateCol.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
@@ -132,6 +137,9 @@ public class chartApp extends Application {
         datapointTable.setItems(niceData.getDataPoints());
 
         tabPane.getTabs().addAll(lineTab, pieTab);
+
+        databaseVBox.getChildren().addAll(datapointTable);
+        screenHBox.getChildren().addAll(tabPane, databaseVBox);
 
         
         popUpStage.setTitle("Individual cell data");
