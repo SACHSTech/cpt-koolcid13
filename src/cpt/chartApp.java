@@ -73,49 +73,77 @@ public class chartApp extends Application {
 
         screenHBox = new HBox(30);
 
-        primaryStage.setTitle("Suicide death rate by age");
-        //primaryStage.show();
-
-        ageRangeCol = new TableColumn<>("Age Range");
-        ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("age"));
-        yearCol = new TableColumn<>("Year");
-        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
-        rateCol = new TableColumn<>("Suicide Rate");
-        rateCol.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
-
         // create table and add cols
         datapointTable = new TableView<>();
-        datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
-        datapointTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        datapointCell = new TableView<>();
+        ageRangeCol = new TableColumn<>("Age Range");
+        yearCol = new TableColumn<>("Year");
+        rateCol = new TableColumn<>("Suicide Rate");
+        ageRangeCol2 = new TableColumn<>("Age Range");
+        yearCol2 = new TableColumn<>("Year");
+        rateCol2 = new TableColumn<>("Suicide Rate");
+        
+        
+        fiveTo14 = new XYChart.Series<>();
+        fiveTo14.setName("5 - 14 years old");
+        fifteenTo49 = new XYChart.Series<>();
+        fifteenTo49.setName("50 - 69 years old");
+        fiftyTo69 = new XYChart.Series<>();
+        fiftyTo69.setName("70+ years old");
+        seventyPlus = new XYChart.Series<>();
+        seventyPlus.setName("All ages");
+        allAge = new XYChart.Series<>();
+        allAge.setName("15 - 49 years old");
+
+
+        niceData = new dataSort(readData());
+
+        mainLineChart = showLineGraph();
+        mainPieChart = showPieChart();
+        
+        tabPane = new TabPane();
+        lineTab = new Tab("Line chart", mainLineChart);
+        pieTab = new Tab("Pie chart", mainPieChart);
+
+        popUpStage = new Stage();
+        mainScene = new Scene(screenHBox);
+        popUpScene = new Scene(datapointTable, 400, 50);
+        
+        ageRangeCol.setCellValueFactory(new PropertyValueFactory<>("age"));
+        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+        rateCol.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
+        ageRangeCol2.setCellValueFactory(new PropertyValueFactory<>("age"));
+        yearCol2.setCellValueFactory(new PropertyValueFactory<>("year"));
+        rateCol2.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
+
+        
         ageRangeCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
         ageRangeCol.setResizable(false);
         yearCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
         yearCol.setResizable(false);
         rateCol.prefWidthProperty().bind(datapointTable.widthProperty().multiply(0.3));
         rateCol.setResizable(false);
+        
+        datapointTable.getColumns().addAll(ageRangeCol, yearCol, rateCol);
+        datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
+        datapointTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        datapointCell.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        datapointTable.setItems(niceData.getDataPoints());
+
+        tabPane.getTabs().addAll(lineTab, pieTab);
 
         
-        niceData = new dataSort(readData());
-        datapointTable.setItems(niceData.getDataPoints());
+        popUpStage.setTitle("Individual cell data");
+        popUpStage.setScene(popUpScene);
 
         datapointTable.setRowFactory( tv -> {
             TableRow<dataPack> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     
-                    ageRangeCol2 = new TableColumn<>("Age Range");
-                    ageRangeCol2.setCellValueFactory(new PropertyValueFactory<>("age"));
-                    yearCol2 = new TableColumn<>("Year");
-                    yearCol2.setCellValueFactory(new PropertyValueFactory<>("year"));
-                    rateCol2 = new TableColumn<>("Suicide Rate");
-                    rateCol2.setCellValueFactory(new PropertyValueFactory<>("suicideRate"));
-
-                    datapointCell = new TableView<>();
-                    datapointCell.getColumns().addAll(ageRangeCol2, yearCol2, rateCol2);
-
                     datapointCell.getItems().clear();
                     datapointCell.getItems().add(row.getItem());
-                    datapointCell.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
                     popUpStage.show();
 
@@ -133,37 +161,20 @@ public class chartApp extends Application {
             
         }
 
+        
+
         // create scene with table
         Scene scene = new Scene(datapointTable, 555, 555);
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        mainLineChart = showLineGraph();
-        mainPieChart = showPieChart();
-
-        tabPane = new TabPane();
-        lineTab = new Tab("Line chart", mainLineChart);
-        pieTab = new Tab("Pie chart", mainPieChart);
-
-        
-        popUpStage = new Stage();
-        popUpStage.setTitle("Individual cell data");
-
-        mainScene = new Scene(screenHBox);
-        popUpScene = new Scene(datapointTable, 400, 50);
-        
-        popUpStage.setScene(popUpScene);
-
-        tabPane.getTabs().addAll(lineTab, pieTab);
-
         
     }
 
 
     public static void main(String[] args) {
         launch(args);
-    } 
+    }
 
 
     private static ObservableList<dataPack> readData() throws IOException {
@@ -210,16 +221,6 @@ public class chartApp extends Application {
         lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle("Suicide rate by year");
 
-        fiveTo14 = new XYChart.Series<>();
-        fiveTo14.setName("5 - 14 years old");
-        fifteenTo49 = new XYChart.Series<>();
-        fifteenTo49.setName("50 - 69 years old");
-        fiftyTo69 = new XYChart.Series<>();
-        fiftyTo69.setName("70+ years old");
-        seventyPlus = new XYChart.Series<>();
-        seventyPlus.setName("All ages");
-        allAge = new XYChart.Series<>();
-        allAge.setName("15 - 49 years old");
 
         for (dataPack datapoint: niceData.getDataPoints()) {
             switch (datapoint.getAge()) {
