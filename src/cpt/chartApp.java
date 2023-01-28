@@ -120,7 +120,7 @@ public class chartApp extends Application {
             
         }
 
-        // button to apply sort
+        /*// button to apply sort
         Button sortRate = new Button("Sort Suicide Rate");
         sortRate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -128,6 +128,7 @@ public class chartApp extends Application {
                 niceData.sort("year", false);
             }
         });
+        */
 
         // create scene with table
         Scene scene = new Scene(datapointTable, 555, 555);
